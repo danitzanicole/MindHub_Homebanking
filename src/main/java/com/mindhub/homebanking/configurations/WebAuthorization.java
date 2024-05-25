@@ -14,35 +14,32 @@ import javax.servlet.http.HttpSession;
 
 @EnableWebSecurity
 @Configuration
-class WebAuthorization {
+public class WebAuthorization {
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/web/index.html", "/web/css/**", "/web/img/**", "/web/js/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers("/**").hasAuthority("CLIENT");
+                .antMatchers("/**","/api/transactions").hasAuthority("CLIENT")
+                .antMatchers("/rest/**", "/h2-console").hasAuthority("ADMIN");
         http.formLogin()
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .loginPage("/api/login");
-
         http.logout().logoutUrl("/api/logout");
         http.csrf().disable();
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
         http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
         http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
-
         return http.build();
     }
-
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-        }
+            session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);}
     }
 
 }

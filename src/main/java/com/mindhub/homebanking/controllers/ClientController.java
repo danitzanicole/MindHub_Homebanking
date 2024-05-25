@@ -1,56 +1,53 @@
 package com.mindhub.homebanking.controllers;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mindhub.homebanking.dtos.ClientDTO;
+import com.mindhub.homebanking.dtos.AccountDTO;
+import com.mindhub.homebanking.models.CardColor;
+import com.mindhub.homebanking.models.CardType;
 import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.implementacion.ClientService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
 public class ClientController {
 
-    @Autowired
-    private ClientService clientService;
-    private ClientRepository clientRepository;
-    private PasswordEncoder passwordEncoder;
+    private final ClientService clientService;
 
-    @Autowired
-    private ClientController(ClientService clientService, ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
-        this.clientService = clientService;
-        this.clientRepository = clientRepository;
-        this.passwordEncoder = passwordEncoder;}
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;}
 
-    @GetMapping("/clients")
+    @RequestMapping("/clients")
+    @JsonIgnore
     public Set<ClientDTO> getClients() {
         return clientService.findAll();}
 
-    @GetMapping("/clients/{id}")
+    @RequestMapping("/clients/{id}")
     public ClientDTO getClients(@PathVariable long id) {
         return clientService.findById(id);}
 
-    @GetMapping("/clients/{current}")
-    public Authentication getClients(ClientDTO clientDTO) {
-        return Authentication.valueOf(clientDTO.getEmail());}
+    @RequestMapping("clients/current")
+    public ClientDTO getCurrentClient() {
+        return clientService.findCurrentClient(SecurityContextHolder.getContext().getAuthentication());}
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam String firstName, @RequestParam String lastName,
-            @RequestParam String email, @RequestParam String password) {
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Faltan datos para la creacion de un Cliente", HttpStatus.FORBIDDEN);}
+    @GetMapping("clients/current/accounts")
+    public List<AccountDTO> getCurrentClients() {
+        return clientService.findCurrentAccount(SecurityContextHolder.getContext().getAuthentication());}
 
-        if (clientRepository.findByEmail(email) !=  null) {
-            return new ResponseEntity<>("Email ya se encuentra registrado", HttpStatus.FORBIDDEN);}
+    @PostMapping("clients/current/accounts")
+    public ResponseEntity<Object> crearAccount(){
+        return clientService.crearAccount(SecurityContextHolder.getContext().getAuthentication());}
 
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("clients/current/cards")
+    public ResponseEntity<Object> crearCard(@RequestParam CardColor cardColor, @RequestParam CardType cardType){
+        return clientService.crearCard(SecurityContextHolder.getContext().getAuthentication(), cardColor, cardType);
     }
 
 }

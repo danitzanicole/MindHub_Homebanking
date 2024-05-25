@@ -19,12 +19,11 @@ public class Transaction {
     private Account account;
 
     public Transaction() {}
-    public Transaction(TransactionType type, double amount, String description, LocalDate creationDate,Account account) {
+    public Transaction(TransactionType type, double amount, String description, LocalDate creationDate) {
         this.type = type;
         this.amount = amount;
         this.description = description;
-        this.creationDate = creationDate;
-        this.account = account;}
+        this.creationDate = creationDate;}
 
     public long getId() {
         return id;
@@ -73,6 +72,5 @@ public class Transaction {
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
                 ", creationDate=" + creationDate +
-                ", account=" + account +
                 '}';}
 }

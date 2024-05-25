@@ -8,5 +8,6 @@ import java.util.Set;
 @Service
 public interface AccountService {
     Set<AccountDTO> findAll();
-    AccountDTO findById(@PathVariable long id);
+
+    AccountDTO findById(long id);
 }

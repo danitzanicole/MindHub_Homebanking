@@ -14,8 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class CardServiceImp implements CardService {
 
-    @Autowired
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
 
     public CardServiceImp(CardRepository cardRepository){
         this.cardRepository = cardRepository;}

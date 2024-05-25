@@ -8,7 +8,6 @@ public class ClientDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
     private List<AccountDTO> accounts;
     private List<ClientLoanDTO> loans;
     private List<CardDTO> cards;
@@ -18,7 +17,6 @@ public class ClientDTO {
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
         this.email = client.getEmail();
-        this.password = client.getPassword();
         this.accounts = client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
         this.loans = client.getClientLoans().stream().map(ClientLoanDTO::new).collect(Collectors.toList());
         this.cards = client.getCards().stream().map(CardDTO::new).collect(Collectors.toList());}
@@ -57,6 +55,4 @@ public class ClientDTO {
     public void setLoans(List<ClientLoanDTO> loans) {this.loans = loans;}
     public List<CardDTO> getCards() {return cards;}
     public void setCards(List<CardDTO> cards) {this.cards = cards;}
-    public String getPassword() {return password;}
-    public void setPassword(String password) {this.password = password;}
 }

@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class AccountServiceImp implements AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountServiceImp (AccountRepository accountRepository){
         this.accountRepository = accountRepository;}

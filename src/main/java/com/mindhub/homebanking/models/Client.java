@@ -62,13 +62,18 @@ public class Client {
     }
     public Set<Account> getAccounts() { return accounts; }
     public void setAccounts(Set<Account> accounts) {this.accounts = accounts;}
-    public void addAccount (Account account){
+
+    @JsonIgnore
+    public void addAccounts (Account account){
         account.setClient(this);
         this.accounts.add(account);}
+
+    @JsonIgnore
     public Set<ClientLoan> getClientLoans() {return clientLoans;}
     public void setClientLoans(Set<ClientLoan> clientLoans) {this.clientLoans = clientLoans;}
     public Set<Card> getCards() {return cards;}
     public void setCards(Set<Card> cards) {this.cards = cards;}
+
     public void addCard (Card card){
         card.setClient(this);
         this.cards.add(card);}

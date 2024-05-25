@@ -4,6 +4,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.services.implementacion.AccountService;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +17,17 @@ import java.util.Set;
 @RequestMapping("/api")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
-    private AccountRepository accountRepository;
+    private final AccountService accountService;
 
-    @Autowired
-    private AccountController(AccountService accountService, AccountRepository accountRepository) {
-        this.accountService = accountService;
-        this.accountRepository = accountRepository;}
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;}
 
-    @GetMapping("/accounts")
+    @RequestMapping ("/accounts")
+    @JsonIgnore
     public Set<AccountDTO> getAccounts() {
         return this.accountService.findAll();}
 
-    @GetMapping("/accounts/{id}")
+    @RequestMapping("/accounts/{id}")
     public AccountDTO getAccounts(@PathVariable long id) {
         return accountService.findById(id);}
 

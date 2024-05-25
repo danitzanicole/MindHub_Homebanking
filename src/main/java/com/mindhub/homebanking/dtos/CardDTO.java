@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class CardDTO {
     private long id;
     private CardType type;
-    private int number;
+    private String number;
     private String cardHolder;
     private CardColor color;
     private LocalDate fromDate;
@@ -26,8 +26,8 @@ public class CardDTO {
     public void setId(long id) {this.id = id;}
     public CardType getType() {return type;}
     public void setType(CardType type) {this.type = type;}
-    public int getNumber() {return number;}
-    public void setNumber(int number) {this.number = number;}
+    public String getNumber() {return number;}
+    public void setNumber(String number) {this.number = number;}
     public CardColor getColor() {return color;}
     public void setColor(CardColor color) {this.color = color;}
     public LocalDate getFromDate() {return fromDate;}

@@ -2,6 +2,7 @@ package com.mindhub.homebanking.models;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Loan {
     private long id;
     private String name;
     private double maxAmount;
+    private LocalDate date;
 
     @ElementCollection
     @Column(name = "payments")
@@ -25,10 +27,11 @@ public class Loan {
     Set<ClientLoan> clientLoans = new HashSet<>();
 
     public Loan() {}
-    public Loan(String name, double maxAmount, List<Integer> payments) {
+    public Loan(String name, double maxAmount, List<Integer> payments, LocalDate date) {
         this.name = name;
         this.maxAmount = maxAmount;
-        this.payments = payments;}
+        this.payments = payments;
+        this.date = date;}
 
     public long getId() {return id;}
     public void setId(long id) {this.id = id;}
@@ -42,6 +45,8 @@ public class Loan {
     public Set<ClientLoan> getClientLoan() {return clientLoans;}
     public void setClientLoan(Set<ClientLoan> clientLoan) {this.clientLoans = clientLoan;}
     public Set<ClientLoan> getClientLoans() { return clientLoans; }
+    public LocalDate getDate() {return date;}
+    public void setDate(LocalDate date) {this.date = date;}
 
     @Override
     public String toString() {
@@ -54,6 +59,5 @@ public class Loan {
 
     @JsonIgnore
     public List<Client> getClients(){
-        //retornar un listado de clientes de un prestamo.
-        return clientLoans.stream().map(sub -> sub.getClient()).collect(Collectors.toList());}
+        return clientLoans.stream().map(ClientLoan::getClient).collect(Collectors.toList());}
 }

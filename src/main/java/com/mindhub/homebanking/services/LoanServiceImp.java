@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class LoanServiceImp implements LoanService {
 
-    @Autowired
-    private  LoanRepository loanRepository;
+    private final LoanRepository loanRepository;
 
     public LoanServiceImp(LoanRepository loanRepository){
         this.loanRepository = loanRepository;}

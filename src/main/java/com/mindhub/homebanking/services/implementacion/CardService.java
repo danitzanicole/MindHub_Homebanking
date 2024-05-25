@@ -10,6 +10,7 @@ import java.util.Set;
 @Service
 public interface CardService {
     Set<CardDTO> findAll();
-    CardDTO findById(@PathVariable long id);
+
+    CardDTO findById(long id);
 
 }

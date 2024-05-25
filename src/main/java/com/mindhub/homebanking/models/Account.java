@@ -22,23 +22,16 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Transaction> transactions = new HashSet<>();
-    public Set<Transaction> getTransactions() { return transactions; }
 
     public Account() {}
-    public Account(String number, LocalDate creationDate, double balance, Client client) {
+    public Account(String number, LocalDate creationDate, double balance) {
         this.number = number;
         this.creationDate = creationDate;
-        this.balance = balance;
-        this.client = client;}
+        this.balance = balance;}
 
     public long getId() {return id;}
     public void setId(long id) {this.id = id;}
-
-    public String getNumber() {
-        
-        return number;
-    }
-
+    public String getNumber() {return number;}
     public void setNumber(String number) {
         this.number = number;
     }
@@ -58,6 +51,7 @@ public class Account {
     public void setClient(Client client) {
         this.client = client;
     }
+    public Set<Transaction> getTransactions() { return transactions; }
     public Transaction getTransaction() { return (Transaction) transactions; }
     public void setTransaction(Transaction transaction) {
         this.transactions = Collections.singleton(transaction);
@@ -70,7 +64,6 @@ public class Account {
                 ", number='" + number + '\'' +
                 ", creationDate=" + creationDate +
                 ", balance=" + balance +
-                ", client=" + client +
                 '}';}
 
 }

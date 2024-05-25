@@ -14,17 +14,15 @@ import java.util.Set;
 @RequestMapping("/api")
 public class CardController {
 
-    @Autowired
-    private CardService cardService;
+    private final CardService cardService;
+    private CardController(CardService cardService) {
+        this.cardService = cardService;};
 
-    @Autowired
-    private CardController(CardService cardService) {this.cardService = cardService;};
-
-    @GetMapping("/cards")
+    @RequestMapping("/cards")
     public Set<CardDTO> getCards() {
         return this.cardService.findAll();}
 
-    @GetMapping("/cards/{id}")
+    @RequestMapping("/cards/{id}")
     public CardDTO getCards(@PathVariable long id) {
         return cardService.findById(id);}
 

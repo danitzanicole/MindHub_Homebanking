@@ -15,17 +15,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class LoanController {
 
-    @Autowired
-    private LoanService loanService;
+    private final LoanService loanService;
+    private LoanController(LoanService loanService) {
+        this.loanService = loanService;};
 
-    @Autowired
-    private LoanController(LoanService loanService) {this.loanService = loanService;};
-
-    @GetMapping("/loans")
+    @RequestMapping("/loans")
     public Set<LoanDTO> getLoans() {
         return this.loanService.findAll();}
 
-    @GetMapping("/loans/{id}")
+    @RequestMapping("/loans/{id}")
     public LoanDTO getLoans(@PathVariable long id) {
         return loanService.findById(id);}
 

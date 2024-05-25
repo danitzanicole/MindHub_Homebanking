@@ -7,6 +7,7 @@ import java.util.Set;
 @Service
 public interface ClientLoanService{
     Set<ClientLoanDTO> findAll();
-    ClientLoanDTO findById(@PathVariable long id);
+
+    ClientLoanDTO findById(long id);
 
 }
