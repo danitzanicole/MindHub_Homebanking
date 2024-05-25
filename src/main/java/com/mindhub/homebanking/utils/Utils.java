@@ -1,7 +1,9 @@
 package com.mindhub.homebanking.utils;
+import com.mindhub.homebanking.dtos.LoanApplicationDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.LoanRepository;
 import org.springframework.security.core.Authentication;
 
 import java.util.Random;
@@ -87,10 +89,46 @@ public final class Utils {
                 return validAccountOwnerShip(sourceAccount, clientRepository, authentication) &&
                         validAccountOwnerShip(destinationAccount, clientRepository, authentication);
             } else {
-                return false;
-            }
+                return false;}
         } else {
-            return false;
-        }
+            return false;}}
+
+    private static boolean notEmptyLoan(LoanApplicationDTO applicationDTO){
+        return applicationDTO.getAmount() != 0 && applicationDTO.getPayments() != 0;}
+
+    private static boolean loanExiste(LoanApplicationDTO loanApplicationDTO, LoanRepository loanRepository){
+        return loanRepository.findById(loanApplicationDTO.getLoanId()).isPresent();}
+
+    private static boolean noExcedeMaximo(LoanApplicationDTO loanApplicationDTO, LoanRepository loanRepository){
+        Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).get();
+        if(loanApplicationDTO.getAmount() <= loan.getMaxAmount() && loan.getPayments().contains(loanApplicationDTO.getPayments())){
+            return true;
+        } else {
+            return false;}}
+
+    public static boolean validarAppliedLoan(LoanApplicationDTO loanApplicationDTO, LoanRepository loanRepository,
+                                             AccountRepository accountRepository, ClientRepository clientRepository,
+                                             Authentication authentication){
+        if ( notEmptyLoan(loanApplicationDTO) && loanExiste(loanApplicationDTO, loanRepository) && noExcedeMaximo(loanApplicationDTO, loanRepository)){
+            if (AccountExiste(loanApplicationDTO.getToAccountNumber(), accountRepository)){
+                Account account = getAccounts(loanApplicationDTO.getToAccountNumber(), accountRepository);
+                if (validAccountOwnerShip(account, clientRepository, authentication)){
+                    return true;
+                } else {return  false;}
+            } else {
+                return false;}
+        } else {
+            return false;}
     }
+
+
+
+
+
+
+
+
+
+
+
 }
